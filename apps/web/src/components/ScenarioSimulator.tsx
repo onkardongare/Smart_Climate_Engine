@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sliders, RefreshCw, Check, ArrowRight } from "lucide-react";
+import { RefreshCw, Check, ArrowRight } from "lucide-react";
 import { climateApi } from "../lib/api";
 import type { RegionInfo } from "../lib/types";
 
@@ -165,45 +165,36 @@ export function ScenarioSimulator({
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-lg sm:text-xl font-bold text-notion-text flex items-center space-x-2.5">
-              <Sliders className="w-5 h-5 text-emerald-500" />
-              <span>Multi-Hazard Climate Scenario Simulator</span>
-            </h1>
-            <p className="text-sm text-notion-secondary mt-1 max-w-3xl leading-relaxed">
-              Test combinations of nature-based sponge zones, permeable pavements, smart telemetry, and traditional civil culverts before committing municipal capital.
-            </p>
-          </div>
-          <div>
-            <button
-              onClick={runSimulation}
-              disabled={isSimulating}
-              className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm font-bold flex items-center space-x-2 transition-colors cursor-pointer shadow-sm"
-            >
-              <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
-              <span>{isSimulating ? "Simulating..." : "Recalculate Results"}</span>
-            </button>
-          </div>
+      <div className="view-intro">
+        <div>
+          <h1 className="page-title">Scenario simulator</h1>
+          <p className="page-deck">Model a package of interventions within your municipality’s budget.</p>
         </div>
+        <button
+          onClick={runSimulation}
+          disabled={isSimulating}
+          className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm font-bold flex items-center space-x-2 transition-colors cursor-pointer"
+        >
+          <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
+          <span>{isSimulating ? "Simulating..." : "Recalculate Results"}</span>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Controls Column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Target Municipality & Fiscal Budget Inputs */}
-          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
-            <h2 className="text-base font-bold text-notion-text">Municipal Scope & Capital Budget</h2>
+          <div className="workspace-panel space-y-5">
+            <h2 className="text-base font-bold text-notion-text">Scope and budget</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold text-notion-text mb-1.5">
+                <label htmlFor="sim-region" className="block text-sm font-semibold text-notion-text mb-1.5">
                   Target City / Region
                 </label>
                 <input
                   type="text"
+                  id="sim-region"
                   value={regionName}
                   onChange={(e) => setRegionName(e.target.value)}
                   placeholder="Enter municipality or district name..."
@@ -213,7 +204,7 @@ export function ScenarioSimulator({
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-sm font-semibold text-notion-text">
+                  <label htmlFor="sim-budget" className="text-sm font-semibold text-notion-text">
                     Capital Budget Limit
                   </label>
                   <span className="text-base font-mono font-bold text-emerald-500">
@@ -226,12 +217,14 @@ export function ScenarioSimulator({
                     min="10"
                     max="150"
                     step="5"
+                    id="sim-budget"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value))}
                     className="flex-1 h-2.5 bg-notion-hover rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <input
                     type="number"
+                    aria-label="Capital budget in crore rupees"
                     min="5"
                     max="300"
                     value={budget}
@@ -244,21 +237,21 @@ export function ScenarioSimulator({
           </div>
 
           {/* Intervention Portfolio Checklist */}
-          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="workspace-panel space-y-4">
+            <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <h2 className="text-base sm:text-lg font-bold text-notion-text">Intervention Portfolio Selection</h2>
+                <h2 className="text-base sm:text-lg font-bold text-notion-text">Intervention portfolio</h2>
                 <p className="text-xs sm:text-sm text-notion-secondary mt-0.5">
-                  Select interventions or pick a preset package to calculate cross-hazard performance.
+                  Choose interventions or apply a preset.
                 </p>
               </div>
 
               {/* 1-Click Preset Buttons */}
-              <div className="flex items-center space-x-2 shrink-0">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={applySpongePreset}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 border border-emerald-500/30 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                 >
                   🍃 Sponge City Preset
                 </button>
@@ -318,18 +311,20 @@ export function ScenarioSimulator({
                   impact: "Flushes surface runoff rapidly; impairs groundwater table (-15%)",
                 },
               ].map((item) => (
-                <div
+                <button
                   key={item.key}
+                  type="button"
+                  aria-pressed={interventions[item.key]}
                   onClick={() => toggleIntervention(item.key)}
-                  className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-md border cursor-pointer text-left transition-colors ${
                     interventions[item.key]
                       ? "bg-notion-bg border-emerald-500 text-notion-text ring-1 ring-emerald-500/30"
                       : "bg-notion-bg/40 border-notion-border text-notion-secondary hover:border-notion-secondary"
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start space-x-3">
-                      <div
+                  <span className="flex flex-wrap items-start justify-between gap-2">
+                    <span className="flex min-w-0 flex-1 basis-36 items-start gap-2">
+                      <span
                         className={`w-5 h-5 rounded mt-0.5 flex items-center justify-center border text-xs shrink-0 ${
                           interventions[item.key]
                             ? "bg-emerald-600 border-emerald-500 text-white"
@@ -337,72 +332,76 @@ export function ScenarioSimulator({
                         }`}
                       >
                         {interventions[item.key] && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                      </div>
-                      <div>
-                        <div className="text-sm sm:text-base font-semibold text-notion-text">{item.label}</div>
-                        <div className="text-xs sm:text-sm text-notion-secondary mt-1 leading-relaxed">{item.impact}</div>
-                      </div>
-                    </div>
+                      </span>
+                      <span>
+                        <span className="block text-sm sm:text-base font-semibold text-notion-text">{item.label}</span>
+                        <span className="block text-xs sm:text-sm text-notion-secondary mt-1 leading-relaxed">{item.impact}</span>
+                      </span>
+                    </span>
                     <span className="text-sm font-mono font-bold text-emerald-500 whitespace-nowrap">
                       {item.cost}
                     </span>
-                  </div>
-                </div>
+                  </span>
+                </button>
               ))}
             </div>
           </div>
 
           {/* Objective Prioritization Weights */}
-          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
-            <h2 className="text-base font-bold text-notion-text">Municipal Priority Balancing</h2>
+          <div className="workspace-panel space-y-4">
+            <h2 className="text-base font-bold text-notion-text">Priority weights</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
               <div>
-                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
+                <label htmlFor="weight-flood" className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Flood Safety
                 </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
+                  id="weight-flood"
                   value={floodWeight}
                   onChange={(e) => setFloodWeight(Number(e.target.value) || 0)}
                   className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
+                <label htmlFor="weight-recharge" className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Aquifer Recharge
                 </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
+                  id="weight-recharge"
                   value={gwWeight}
                   onChange={(e) => setGwWeight(Number(e.target.value) || 0)}
                   className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
+                <label htmlFor="weight-heat" className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Urban Heat Relief
                 </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
+                  id="weight-heat"
                   value={heatWeight}
                   onChange={(e) => setHeatWeight(Number(e.target.value) || 0)}
                   className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
+                <label htmlFor="weight-cost" className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Cost Efficiency
                 </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
+                  id="weight-cost"
                   value={costWeight}
                   onChange={(e) => setCostWeight(Number(e.target.value) || 0)}
                   className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
@@ -415,7 +414,7 @@ export function ScenarioSimulator({
                 type="button"
                 onClick={runSimulation}
                 disabled={isSimulating}
-                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm sm:text-base font-bold flex items-center justify-center space-x-2 transition-colors cursor-pointer shadow-sm"
+                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm sm:text-base font-bold flex items-center justify-center space-x-2 transition-colors cursor-pointer"
               >
                 <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
                 <span>{isSimulating ? "Running Simulation..." : "Simulate Scenario Impact"}</span>
@@ -426,10 +425,10 @@ export function ScenarioSimulator({
 
         {/* Results Column */}
         <div className="space-y-6">
-          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-6 shadow-sm">
+          <div className="workspace-panel scorecard space-y-6">
             <div>
-              <span className="text-xs font-bold text-emerald-500 uppercase tracking-wider">
-                Simulation Scorecard
+              <span className="text-xs font-bold text-emerald-500">
+                Simulation results
               </span>
               <h3 className="text-base sm:text-lg font-bold text-notion-text mt-1">
                 {regionName}
@@ -437,9 +436,9 @@ export function ScenarioSimulator({
             </div>
 
             {/* Composite Score Card */}
-            <div className="bg-notion-bg border border-notion-border rounded-xl p-5 text-center">
-              <span className="text-xs text-notion-secondary uppercase tracking-wider block font-medium">
-                Composite Resilience Score
+            <div className="score-block">
+              <span className="text-xs text-notion-secondary block font-medium">
+                Composite resilience score
               </span>
               <div className="text-4xl sm:text-5xl font-black text-emerald-500 font-mono my-2">
                 {simResults.resilience_index} <span className="text-base text-notion-secondary font-normal">/ 100</span>
@@ -534,8 +533,8 @@ export function ScenarioSimulator({
 
             {/* Strategic Notes */}
             <div className="pt-4 border-t border-notion-border space-y-2 text-xs sm:text-sm">
-              <span className="font-semibold text-notion-text uppercase tracking-wider text-xs block mb-1">
-                Summary of Trade-Offs
+              <span className="font-semibold text-notion-text text-xs block mb-1">
+                Trade-offs
               </span>
               <ul className="space-y-1.5 text-notion-text">
                 {simResults.advantages.map((adv, i) => (
