@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CloudRain, Droplets, Thermometer, Database } from "lucide-react";
+import { CloudRain, Droplets, Thermometer, Layers } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -49,66 +49,59 @@ export function EnvironmentalExplorer({
 
   return (
     <div className="space-y-6">
-      {/* Title */}
-      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm">
-        <div className="flex items-center space-x-2 text-emerald-500 text-xs font-bold uppercase tracking-wider mb-1">
-          <Database className="w-4 h-4" />
-          <span>Real-time Environmental Telemetry Stream</span>
+      <div className="view-intro">
+        <div>
+          <h1 className="page-title">Sensor telemetry</h1>
+          <p className="page-deck">Sample readings and trends. The station table uses gateway data when available and sample records otherwise.</p>
         </div>
-        <h1 className="text-lg sm:text-xl font-bold text-notion-text">
-          {selectedRegion}: Climate Observation & Sensor Telemetry
-        </h1>
-        <p className="text-xs sm:text-sm text-notion-secondary mt-1 max-w-3xl leading-relaxed">
-          Fused stream of rain gauges, river stage transducers, ambient temperature monitors, and satellite land-use indexes loaded live via the Express backend from PostGIS.
-        </p>
       </div>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 shadow-sm">
+      <div className="observation-strip">
+        <div className="observation">
           <div className="flex items-center justify-between text-notion-secondary mb-2">
-            <span className="text-xs sm:text-sm font-semibold text-notion-text">Peak 24h Precipitation</span>
+            <span className="text-xs sm:text-sm font-semibold text-notion-text">Peak 24h rainfall</span>
             <CloudRain className="w-5 h-5 text-blue-500" />
           </div>
-          <div className="text-3xl font-extrabold text-notion-text font-mono">145.7 mm</div>
-          <div className="text-xs text-rose-500 mt-1.5 font-medium">Recorded at Northern Catchment Gauge (+124% normal)</div>
+          <div className="observation-value">145.7 mm</div>
+          <div className="text-xs text-rose-500 mt-1.5 font-medium">Northern Catchment Gauge, 124% above normal</div>
         </div>
 
-        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 shadow-sm">
+        <div className="observation">
           <div className="flex items-center justify-between text-notion-secondary mb-2">
-            <span className="text-xs sm:text-sm font-semibold text-notion-text">Primary River Stage</span>
+            <span className="text-xs sm:text-sm font-semibold text-notion-text">Primary river stage</span>
             <Droplets className="w-5 h-5 text-cyan-500" />
           </div>
-          <div className="text-3xl font-extrabold text-amber-500 font-mono">4.40 m</div>
-          <div className="text-xs text-amber-500 mt-1.5 font-medium">Danger Mark: 4.50 m (10 cm headroom)</div>
+          <div className="observation-value">4.40 m</div>
+          <div className="text-xs text-amber-500 mt-1.5 font-medium">10 cm below the 4.50 m danger mark</div>
         </div>
 
-        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 shadow-sm">
+        <div className="observation">
           <div className="flex items-center justify-between text-notion-secondary mb-2">
-            <span className="text-xs sm:text-sm font-semibold text-notion-text">Impervious Surface Ratio</span>
-            <span className="text-xs font-mono font-bold text-rose-500">72.0%</span>
+            <span className="text-xs sm:text-sm font-semibold text-notion-text">Impervious surface</span>
+            <Layers aria-hidden="true" className="w-5 h-5 text-rose-500" />
           </div>
-          <div className="text-3xl font-extrabold text-notion-text font-mono">72.0%</div>
-          <div className="text-xs text-notion-secondary mt-1.5 font-medium">Accelerates runoff 3.8x vs sponge basin</div>
+          <div className="observation-value">72.0%</div>
+          <div className="text-xs text-notion-secondary mt-1.5 font-medium">3.8× the runoff rate of a sponge basin</div>
         </div>
 
-        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 shadow-sm">
+        <div className="observation">
           <div className="flex items-center justify-between text-notion-secondary mb-2">
-            <span className="text-xs sm:text-sm font-semibold text-notion-text">Peak Surface Temperature</span>
+            <span className="text-xs sm:text-sm font-semibold text-notion-text">Peak surface temperature</span>
             <Thermometer className="w-5 h-5 text-amber-500" />
           </div>
-          <div className="text-3xl font-extrabold text-amber-500 font-mono">37.4 °C</div>
-          <div className="text-xs text-notion-secondary mt-1.5 font-medium">Industrial MIDC Hub (Urban Heat Island)</div>
+          <div className="observation-value">37.4 °C</div>
+          <div className="text-xs text-notion-secondary mt-1.5 font-medium">Industrial MIDC Hub heat island</div>
         </div>
       </div>
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Rainfall Comparison Chart */}
-        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-notion-text">Precipitation by Station (mm/day)</h2>
-            <span className="text-xs text-blue-500 font-mono font-medium">Actual vs Seasonal Mean</span>
+        <div className="workspace-panel space-y-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="text-sm font-bold text-notion-text">Rainfall by station (mm/day)</h2>
+            <span className="text-xs text-blue-500 font-mono font-medium">Recorded and seasonal mean</span>
           </div>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -119,18 +112,18 @@ export function EnvironmentalExplorer({
                 <Tooltip
                   contentStyle={{ backgroundColor: "var(--notion-bg)", borderColor: "var(--notion-border)", borderRadius: "0.5rem", fontSize: "12px", color: "var(--notion-text)" }}
                 />
-                <Bar dataKey="rainfall" name="Recorded (mm)" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="normal" name="Seasonal Baseline (mm)" fill="var(--notion-border)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="rainfall" name="Recorded (mm)" fill="#366e78" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="normal" name="Seasonal Baseline (mm)" fill="#97ac8b" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* River Hydrologic Stage */}
-        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-notion-text">River Stage Levels (24h Trend)</h2>
-            <span className="text-xs text-amber-500 font-mono font-medium">Primary vs Secondary Confluence</span>
+        <div className="workspace-panel space-y-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="text-sm font-bold text-notion-text">River levels over time (m)</h2>
+            <span className="text-xs text-amber-500 font-mono font-medium">Primary and secondary confluence</span>
           </div>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -141,9 +134,9 @@ export function EnvironmentalExplorer({
                 <Tooltip
                   contentStyle={{ backgroundColor: "var(--notion-bg)", borderColor: "var(--notion-border)", borderRadius: "0.5rem", fontSize: "12px", color: "var(--notion-text)" }}
                 />
-                <Line type="monotone" dataKey="primary" name="Primary Catchment River" stroke="#06b6d4" strokeWidth={2.5} dot={{ r: 4 }} />
-                <Line type="monotone" dataKey="secondary" name="Secondary Confluence" stroke="#3b82f6" strokeWidth={2} />
-                <Line type="monotone" dataKey="danger" name="Critical Danger Level" stroke="#ef4444" strokeDasharray="4 4" strokeWidth={1.5} />
+                <Line type="monotone" dataKey="primary" name="Primary Catchment River" stroke="#236c70" strokeWidth={2.5} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="secondary" name="Secondary Confluence" stroke="#607d42" strokeWidth={2} />
+                <Line type="monotone" dataKey="danger" name="Critical Danger Level" stroke="#a04137" strokeDasharray="4 4" strokeWidth={1.5} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -154,11 +147,12 @@ export function EnvironmentalExplorer({
       <div className="bg-notion-sidebar border border-notion-border rounded-xl overflow-hidden shadow-sm">
         <div className="p-4 sm:p-5 bg-notion-bg border-b border-notion-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h2 className="text-sm sm:text-base font-bold text-notion-text">
-            Active Telemetry Feed ({filteredPoints.length} Data Points via Express)
+            Station records ({filteredPoints.length})
+            <span className="block text-xs font-normal text-notion-secondary mt-1">{selectedRegion}</span>
           </h2>
           <div className="flex items-center space-x-2 text-sm">
-            <span className="text-notion-secondary text-xs sm:text-sm font-medium">Filter by Variable:</span>
-            <select
+            <label htmlFor="telemetry-variable" className="text-notion-secondary text-xs sm:text-sm font-medium">Variable</label>
+            <select id="telemetry-variable"
               value={selectedFilter}
               onChange={(e) => setSelectedFilter(e.target.value)}
               className="bg-notion-sidebar border border-notion-border rounded-lg px-3 py-1.5 text-xs sm:text-sm text-notion-text focus:outline-none cursor-pointer"
@@ -174,13 +168,13 @@ export function EnvironmentalExplorer({
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-notion-bg text-notion-secondary uppercase text-xs tracking-wider border-b border-notion-border font-semibold">
+            <thead className="bg-notion-bg text-notion-secondary text-xs border-b border-notion-border font-semibold">
               <tr>
-                <th className="px-5 py-3.5">Station / Sensor Source</th>
+                <th className="px-5 py-3.5">Station</th>
                 <th className="px-5 py-3.5">Variable</th>
                 <th className="px-5 py-3.5">Value</th>
                 <th className="px-5 py-3.5">Coordinates</th>
-                <th className="px-5 py-3.5">Recorded At</th>
+                <th className="px-5 py-3.5">Recorded at</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-notion-border text-notion-text">
