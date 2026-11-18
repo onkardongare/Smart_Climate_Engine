@@ -24,12 +24,12 @@
 .dark,
 [data-theme="dark"] {
   /* Dark Mode */
-  --notion-bg: #191919;
-  --notion-sidebar: #202020;
-  --notion-text: #ffffff;
-  --notion-secondary: #9b9a97;
-  --notion-border: #2f2f2f;
-  --notion-hover: #2c2c2c;
+  --notion-bg: #0e1921;
+  --notion-sidebar: #172630;
+  --notion-text: #edf4f6;
+  --notion-secondary: #b2c2c9;
+  --notion-border: #344751;
+  --notion-hover: #223741;
 }
 
 /* Fallback direct utility classes if dynamic variable theme resolution is delayed by dev-server cache */
@@ -94,4 +94,41 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--notion-secondary);
+}
+
+.matrix-brief {
+  background: var(--notion-sidebar);
+}
+
+.matrix-brief-heading {
+  background-color: #16353a;
+  background-image: repeating-radial-gradient(ellipse at 114% 220%, transparent 0 35px, rgb(107 192 167 / 9%) 36px 37px, transparent 38px 54px);
+}
+
+.matrix-title {
+  max-width: 34ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.scenario-inspect::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+}
+
+:where(button, select):focus-visible,
+.scenario-inspect:focus-visible::after {
+  outline: 2px solid #74e6ce;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-emerald {
+    animation: none;
+  }
 }

@@ -32,77 +32,52 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="matrix-brief border border-notion-border rounded-xl overflow-hidden">
+        <div className="matrix-brief-heading grid lg:grid-cols-[minmax(0,1fr)_auto] items-center gap-5 p-5 sm:p-7">
           <div>
-            <div className="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-1">
+            <div className="text-sm font-semibold text-teal-300 mb-2">
               Decision Matrix & Trade-Offs
             </div>
-            <h1 className="text-lg sm:text-xl font-bold text-notion-text">
+            <h1 className="matrix-title text-notion-text">
               {selectedRegion}: Climate Resilience Intervention Comparison
             </h1>
-            <p className="text-xs sm:text-sm text-notion-secondary mt-1 max-w-3xl leading-relaxed">
+            <p className="text-sm text-notion-secondary mt-3 max-w-[72ch] leading-relaxed">
               Compare strategic options under the benchmark <strong>Rs. 50 Crore</strong> municipal capital budget envelope. The multi-objective engine calculates secondary impacts on aquifer recharge, downstream runoff, and urban heat.
             </p>
           </div>
 
           {/* Quick Metrics */}
-          <div className="flex items-center space-x-3 shrink-0">
-            <div className="bg-notion-bg border border-notion-border rounded-lg px-4 py-2.5 text-center">
-              <span className="text-xs text-notion-secondary uppercase block font-medium">Benchmark Budget</span>
-              <span className="text-base sm:text-lg font-bold text-emerald-500 font-mono">Rs. 50.0 Cr</span>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 lg:gap-4">
+            <div className="border-l-2 border-teal-400/60 pl-3">
+              <span className="text-xs text-notion-secondary block font-medium mb-1">Benchmark Budget</span>
+              <span className="text-base sm:text-lg font-bold text-teal-300 font-mono">Rs. 50.0 Cr</span>
             </div>
-            <div className="bg-notion-bg border border-notion-border rounded-lg px-4 py-2.5 text-center">
-              <span className="text-xs text-notion-secondary uppercase block font-medium">Optimal Headroom</span>
-              <span className="text-base sm:text-lg font-bold text-cyan-500 font-mono">Rs. 15.0 Cr Saved</span>
+            <div className="border-l-2 border-teal-400/60 pl-3">
+              <span className="text-xs text-notion-secondary block font-medium mb-1">Optimal Headroom</span>
+              <span className="text-base sm:text-lg font-bold text-cyan-300 font-mono">Rs. 15.0 Cr Saved</span>
             </div>
           </div>
         </div>
 
         {/* Sort & Filter Controls */}
-        <div className="mt-5 pt-3.5 border-t border-notion-border flex flex-wrap items-center justify-between gap-3 text-sm">
-          <div className="flex items-center space-x-2">
-            <span className="text-notion-secondary text-xs sm:text-sm font-medium">Sort Options:</span>
-            <button
-              onClick={() => setSortBy("default")}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
-                sortBy === "default"
-                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
-                  : "text-notion-secondary hover:text-notion-text"
-              }`}
-            >
-              Default
-            </button>
-            <button
-              onClick={() => setSortBy("flood")}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
-                sortBy === "flood"
-                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
-                  : "text-notion-secondary hover:text-notion-text"
-              }`}
-            >
-              Highest Flood Safety
-            </button>
-            <button
-              onClick={() => setSortBy("groundwater")}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
-                sortBy === "groundwater"
-                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
-                  : "text-notion-secondary hover:text-notion-text"
-              }`}
-            >
-              Best Aquifer Recharge
-            </button>
-            <button
-              onClick={() => setSortBy("cost")}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
-                sortBy === "cost"
-                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
-                  : "text-notion-secondary hover:text-notion-text"
-              }`}
-            >
-              Lowest Cost
-            </button>
+        <div className="bg-notion-sidebar px-5 sm:px-7 py-3 border-t border-notion-border flex flex-wrap items-center justify-between gap-3 text-sm">
+          <div role="group" aria-label="Sort options" className="flex flex-wrap items-center gap-1.5">
+            <span className="text-notion-secondary text-xs font-medium mr-1">Sort Options:</span>
+            {([
+              ["default", "Default"],
+              ["flood", "Highest Flood Safety"],
+              ["groundwater", "Best Aquifer Recharge"],
+              ["cost", "Lowest Cost"],
+            ] as const).map(([value, label]) => (
+              <button
+                key={value}
+                onClick={() => setSortBy(value)}
+                aria-pressed={sortBy === value}
+                className="rounded-md border border-transparent px-2.5 py-2 text-xs sm:text-sm text-notion-secondary hover:bg-notion-hover cursor-pointer aria-pressed:border-teal-400/30 aria-pressed:bg-teal-400/10 aria-pressed:!text-teal-300"
+              >
+                {label}
+              </button>
+            ))}
           </div>
 
           <div className="flex items-center space-x-2">
@@ -118,7 +93,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
       </div>
 
       {/* The 4-Option Matrix Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {sortedScenarios.map((option) => {
           const isSelected = selectedId === option.id;
           const isRec = option.is_recommended;
@@ -126,22 +101,22 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
           return (
             <div
               key={option.id}
-              onClick={() => setSelectedId(option.id)}
-              className={`cursor-pointer rounded-xl p-5 transition-all border flex flex-col justify-between shadow-sm ${
+              className={`relative rounded-xl p-5 border flex flex-col ${
                 isRec
-                  ? "bg-notion-sidebar border-emerald-500 ring-2 ring-emerald-500/30"
+                  ? "bg-notion-sidebar border-teal-400/65"
                   : isSelected
-                  ? "bg-notion-sidebar border-notion-secondary ring-1 ring-notion-secondary"
-                  : "bg-notion-sidebar/60 border-notion-border hover:border-notion-secondary"
+                  ? "bg-notion-sidebar border-teal-300"
+                  : "bg-notion-sidebar border-notion-border hover:border-notion-secondary"
               }`}
             >
-              <div>
-                <div className="flex justify-between items-start mb-2">
+              <div className="flex flex-1 flex-col">
+                <div className="flex flex-col items-start gap-2 mb-2">
                   <h2 className="font-bold text-notion-text text-sm sm:text-base leading-snug">
                     {option.name}
                   </h2>
                   {isRec && (
-                    <span className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 text-xs font-bold px-2.5 py-0.5 rounded-md shrink-0">
+                    <span className="text-teal-300 text-xs font-semibold flex items-center gap-1">
+                      <CheckCircle2 aria-hidden="true" className="h-3.5 w-3.5" />
                       Recommended
                     </span>
                   )}
@@ -151,7 +126,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
                 </p>
 
                 {/* Score Table */}
-                <div className="space-y-2 text-sm bg-notion-bg rounded-lg p-3.5 border border-notion-border font-mono">
+                <div className="mt-auto space-y-2 text-sm bg-notion-bg rounded-lg p-3.5 border border-notion-border font-mono">
                   <div className="flex justify-between items-center">
                     <span className="text-notion-secondary font-sans text-xs sm:text-sm">Flood Containment:</span>
                     <span className="font-bold text-emerald-500 text-sm sm:text-base">-{option.flood_risk_reduction_pct}%</span>
@@ -184,14 +159,17 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
 
               <div className="mt-4 pt-3 border-t border-notion-border flex items-center justify-between text-xs sm:text-sm">
                 <span className="text-notion-secondary">{option.implementation_months} mo timeline</span>
-                <span
-                  className={`font-semibold flex items-center space-x-1 ${
+                <button
+                  onClick={() => setSelectedId(option.id)}
+                  aria-label={`Inspect ${option.name}`}
+                  aria-pressed={isSelected}
+                  className={`scenario-inspect cursor-pointer font-semibold flex items-center space-x-1 ${
                     isSelected ? "text-emerald-500" : "text-notion-secondary"
                   }`}
                 >
                   <span>{isSelected ? "Inspecting" : "Select Option"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </span>
+                </button>
               </div>
             </div>
           );
@@ -211,7 +189,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
                 {selectedScenario.name}
               </h2>
             </div>
-            <div className="flex items-center space-x-2 text-sm">
+            <div className="flex flex-wrap items-center gap-2 text-sm">
               <span className="px-3 py-1 rounded-lg bg-notion-bg text-notion-text border border-notion-border font-mono font-bold">
                 Rs. {selectedScenario.cost_crores} Cr
               </span>

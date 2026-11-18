@@ -20,17 +20,17 @@ export function Navbar({
   regions,
 }: NavbarProps) {
   return (
-    <header className="border-b border-notion-border bg-notion-bg/95 sticky top-0 z-50">
+    <header className="border-b border-notion-border bg-notion-bg/95 sm:sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Header Row */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3.5 gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-3.5 gap-3">
           {/* Logo & Platform Name */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-lg bg-notion-sidebar border border-notion-border flex items-center justify-center text-accent-emerald font-bold shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-teal-400/10 border border-teal-400/30 flex items-center justify-center text-teal-300 font-bold shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span className="text-lg sm:text-xl font-bold tracking-tight text-notion-text">
                   Smart Climate Engine
                 </span>
@@ -45,7 +45,7 @@ export function Navbar({
           </div>
 
           {/* Region / Municipality Selector */}
-          <div className="flex items-center space-x-2 bg-notion-sidebar border border-notion-border rounded-lg px-3 py-2 text-sm shadow-sm">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 bg-notion-sidebar border border-notion-border rounded-lg px-3 py-2 text-sm shadow-sm">
             <span className="text-notion-secondary font-medium whitespace-nowrap text-xs sm:text-sm">
               Target Municipality:
             </span>
@@ -53,7 +53,7 @@ export function Navbar({
               aria-label="Select Target Municipality"
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
-              className="bg-notion-sidebar text-accent-emerald font-semibold outline-none cursor-pointer text-xs sm:text-sm"
+              className="min-w-0 max-w-full flex-1 bg-notion-sidebar text-teal-300 font-semibold cursor-pointer text-xs sm:text-sm"
             >
               {regions.map((r) => (
                 <option key={r.id} value={r.name} className="bg-notion-bg text-notion-text">
@@ -65,7 +65,7 @@ export function Navbar({
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex space-x-1.5 overflow-x-auto py-2.5 border-t border-notion-border text-sm">
+        <nav aria-label="Decision portal" className="grid grid-cols-2 gap-1 sm:flex sm:flex-wrap py-2 border-t border-notion-border text-sm">
           {[
             { id: "matrix", label: "Decision Matrix", icon: BarChart3 },
             { id: "simulator", label: "Scenario Simulator", icon: Sliders },
@@ -80,9 +80,10 @@ export function Navbar({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                aria-current={isActive ? "page" : undefined}
+                className={`flex min-w-0 items-center gap-1.5 px-2 py-2 text-left sm:px-3 rounded-md text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                   isActive
-                    ? "bg-notion-hover text-accent-emerald border border-notion-border shadow-sm"
+                    ? "bg-teal-400/10 text-teal-300 border border-teal-400/30"
                     : "text-notion-secondary hover:text-notion-text hover:bg-notion-hover border border-transparent"
                 }`}
               >
@@ -91,7 +92,7 @@ export function Navbar({
               </button>
             );
           })}
-        </div>
+        </nav>
       </div>
     </header>
   );
